@@ -1,0 +1,53 @@
+name: NusaShop
+version: '${project.version}'
+main: id.nusashop.NusaShop
+api-version: '1.16'
+depend: [Vault]
+softdepend: [PlaceholderAPI]
+authors: [NusaTown]
+description: Shop plugin dengan fitur jual beli untuk server NusaTown
+
+commands:
+  nusashop:
+    description: Command utama untuk NusaShop
+    usage: /<command>
+    aliases: [shop, toko]
+  shopadmin:
+    description: Command untuk admin shop
+    usage: /<command> [reload|help]
+    permission: nusashop.admin
+  shopstats:
+    description: Menampilkan statistik NusaShop
+    usage: /<command> [global|player <nama>]
+  sellgui:
+    description: Membuka GUI untuk menjual item dengan cepat
+    usage: /<command>
+    aliases: [sg]
+    permission: nusashop.sell
+  blackmarket:
+    description: Command untuk mengakses Blackmarket
+    usage: /<command> [info]
+    permission: nusashop.blackmarket
+
+permissions:
+  nusashop.use:
+    description: Izin untuk menggunakan shop
+    default: true
+  nusashop.admin:
+    description: Izin untuk mengakses fitur admin
+    default: op
+  nusashop.sell:
+    description: Izin untuk menggunakan fitur jual
+    default: true
+  nusashop.blackmarket:
+    description: Izin untuk mengakses blackmarket
+    default: true
+  nusashop.blackmarket.vip:
+    description: Izin untuk akses VIP ke blackmarket (diskon biaya masuk dan akses lebih awal)
+    default: false
+  nusashop.blackmarket.tier2:
+    description: Izin untuk membeli item tier 2 di blackmarket
+    default: false
+  nusashop.blackmarket.legendary:
+    description: Izin untuk membeli item legendary di blackmarket
+    default: false

@@ -1,0 +1,33 @@
+# NusaShop Messages
+
+general:
+  prefix: "&8[&bNusaShop&8] &7"
+  player-only: "&cHanya player yang dapat menggunakan perintah ini."
+  no-permission: "&cKamu tidak memiliki izin untuk menggunakan perintah ini."
+  
+shop:
+  buy-success: "&aBerhasil membeli &b%amount%x %item% &asenilai &e%price%"
+  buy-failed: "&cGagal membeli item. Uang tidak cukup."
+  sell-success: "&aBerhasil menjual &b%amount%x %item% &asenilai &e%price%"
+  sell-failed: "&cGagal menjual item. Kamu tidak memiliki cukup item."
+  confirm-buy: "&eKonfirmasi pembelian &b%amount%x %item% &esenilai &6%price%&e?"
+  confirm-sell: "&eKonfirmasi penjualan &b%amount%x %item% &esenilai &6%price%&e?"
+  cannot-buy: "&cItem ini tidak dapat dibeli."
+  cannot-sell: "&cItem ini tidak dapat dijual."
+  inventory-full: "&cInventory kamu penuh!"
+  transaction-error: "&cTerjadi kesalahan dalam transaksi."
+  custom-quantity:
+    buy-prompt: "&aKetik jumlah yang ingin dibeli (atau 'batal'):"
+    sell-prompt: "&6Ketik jumlah yang ingin dijual (atau 'batal'):"
+    canceled: "&eTransaksi dibatalkan."
+    invalid-number: "&cMasukkan angka yang valid."
+    number-too-small: "&cJumlah harus lebih dari 0."
+    insufficient-items: "&cAnda hanya memiliki %amount% item."
+
+sellgui:
+  title: "&2&lJual Item"
+  no-items: "&cAnda tidak memiliki item yang bisa dijual"
+  sell-all: "&aAnda berhasil menjual semua item yang tersedia"
+  
+admin:
+  reload: "&aKonfigurasi NusaShop berhasil dimuat ulang!"
