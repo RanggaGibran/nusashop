@@ -35,6 +35,7 @@ id\nusashop\commands\StatsCommand.class
 id\nusashop\managers\EventManager.class
 id\nusashop\listeners\GuiProtectionListener.class
 id\nusashop\managers\BlackmarketManager$4.class
+id\nusashop\commands\SellWandCommand.class
 id\nusashop\utils\TextStyle.class
 id\nusashop\commands\AdminTabCompleter.class
 id\nusashop\commands\BlackmarketTabCompleter.class
@@ -48,6 +49,7 @@ id\nusashop\utils\Animations$1.class
 id\nusashop\utils\ShopUtils.class
 id\nusashop\commands\SellGuiCommand.class
 id\nusashop\listeners\GuiProtectionListener$1.class
+id\nusashop\models\SellWand.class
 id\nusashop\gui\ItemDetailsGUI.class
 id\nusashop\api\NusaShopAPI$TransactionResult.class
 id\nusashop\gui\admin\ItemEditGUI.class
@@ -57,3 +59,4 @@ id\nusashop\api\NusaShopAPI$ItemSold.class
 id\nusashop\managers\EventManager$1.class
 id\nusashop\utils\ChatInputManager$InputRequest.class
 id\nusashop\config\ConfigManager.class
+id\nusashop\listeners\SellWandListener.class

@@ -9,9 +9,11 @@ d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\placeholders\ShopExpansion.jav
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\BlackmarketGUI.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\models\Category.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\MainShopGUI.java
+d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\models\SellWand.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\utils\Animations.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\CategoryShopGUI.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\commands\BlackmarketTabCompleter.java
+d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\commands\SellWandCommand.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\managers\BlackmarketManager.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\listeners\BlackmarketListener.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\admin\CategoryEditGUI.java
@@ -21,6 +23,7 @@ d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\commands\AdminCommand.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\admin\AdminShopGUI.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\listeners\GuiProtectionListener.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\ConfirmationGUI.java
+d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\listeners\SellWandListener.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\models\BlackmarketItem.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\gui\ItemDetailsGUI.java
 d:\Plugin Nusa\nusashop\src\main\java\id\nusashop\commands\AdminTabCompleter.java

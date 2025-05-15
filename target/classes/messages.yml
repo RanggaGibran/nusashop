@@ -31,3 +31,10 @@ sellgui:
   
 admin:
   reload: "&aKonfigurasi NusaShop berhasil dimuat ulang!"
+
+sellwand:
+  no-permission: "&cAnda tidak memiliki izin untuk menggunakan Tongkat Penjual!"
+  used: "&aAnda telah menggunakan Tongkat Penjual! Penggunaan tersisa: &e%uses%"
+  depleted: "&cTongkat Penjual Anda telah kehabisan penggunaan dan menghilang!"
+  nothing-sold: "&eTidak ada item yang dapat dijual dalam chest ini."
+  success: "&aBerhasil menjual &e%amount% &aitem dengan total &6%price% coins"

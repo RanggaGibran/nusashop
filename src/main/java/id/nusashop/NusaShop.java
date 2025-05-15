@@ -7,11 +7,13 @@ import id.nusashop.commands.StatsCommand;
 import id.nusashop.commands.SellGuiCommand;
 import id.nusashop.commands.BlackmarketCommand;
 import id.nusashop.commands.BlackmarketTabCompleter;
+import id.nusashop.commands.SellWandCommand;
 import id.nusashop.config.ConfigManager;
 import id.nusashop.listeners.AdminGUIListener;
 import id.nusashop.listeners.ChatInputListener;
 import id.nusashop.listeners.InventoryListener;
 import id.nusashop.listeners.BlackmarketListener;
+import id.nusashop.listeners.SellWandListener;
 import id.nusashop.managers.ShopManager;
 import id.nusashop.managers.StatisticsManager;
 import id.nusashop.managers.BlackmarketManager;
@@ -24,6 +26,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.command.TabCompleter;
 
 import java.util.logging.Logger;
 
@@ -81,12 +84,15 @@ public class NusaShop extends JavaPlugin {
         getCommand("sellgui").setExecutor(new SellGuiCommand(this));
         getCommand("blackmarket").setExecutor(new BlackmarketCommand(this));
         getCommand("blackmarket").setTabCompleter(new BlackmarketTabCompleter(this));
+        getCommand("sellwand").setExecutor(new SellWandCommand(this));
+        getCommand("sellwand").setTabCompleter((TabCompleter) getCommand("sellwand").getExecutor());
         
         // Register event listeners
         getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
         getServer().getPluginManager().registerEvents(new AdminGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new ChatInputListener(this), this);
-        getServer().getPluginManager().registerEvents(new BlackmarketListener(this), this); // Tambahkan ini
+        getServer().getPluginManager().registerEvents(new BlackmarketListener(this), this);
+        getServer().getPluginManager().registerEvents(new SellWandListener(this), this);
         
         // Register PlaceholderAPI expansion if available
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
