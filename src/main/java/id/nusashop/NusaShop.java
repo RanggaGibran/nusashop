@@ -21,6 +21,7 @@ import id.nusashop.placeholders.ShopExpansion;
 import id.nusashop.utils.ChatInputManager;
 import id.nusashop.utils.Messages;
 import id.nusashop.managers.EventManager;
+import id.nusashop.managers.WebhookManager;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -44,6 +45,7 @@ public class NusaShop extends JavaPlugin {
     private StatisticsManager statisticsManager;
     private EventManager eventManager;
     private BlackmarketManager blackmarketManager;
+    private WebhookManager webhookManager;
 
     @Override
     public void onEnable() {
@@ -75,6 +77,10 @@ public class NusaShop extends JavaPlugin {
         // Inisialisasi BlackmarketManager
         blackmarketManager = new BlackmarketManager(this);
         getLogger().info("Blackmarket Manager initialized");
+        
+        // Inisialisasi WebhookManager
+        webhookManager = new WebhookManager(this);
+        getLogger().info("Webhook Manager initialized");
         
         // Register commands dan tab completers
         getCommand("nusashop").setExecutor(new ShopCommand(this));
@@ -199,6 +205,14 @@ public class NusaShop extends JavaPlugin {
      */
     public BlackmarketManager getBlackmarketManager() {
         return blackmarketManager;
+    }
+    
+    /**
+     * Mendapatkan WebhookManager
+     * @return WebhookManager instance
+     */
+    public WebhookManager getWebhookManager() {
+        return webhookManager;
     }
     
     /**

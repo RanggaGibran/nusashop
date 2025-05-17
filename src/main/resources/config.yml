@@ -58,3 +58,12 @@ events:
       start-time: "2025-06-01 00:00:00"
       end-time: "2025-06-03 23:59:59"
       buy-multiplier: 0.85
+
+# Discord webhook integration
+discord:
+  # Whether Discord webhook integration is enabled
+  enabled: false
+  # Webhook URL for event notifications
+  event-webhook-url: ""
+  # Webhook URL for blackmarket notifications
+  blackmarket-webhook-url: ""

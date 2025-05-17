@@ -136,6 +136,16 @@ public class EventManager {
                     
                     plugin.getLogger().info("Event aktif: " + eventName);
                     plugin.getLogger().info("Berlangsung hingga: " + endTime.format(DISPLAY_FORMATTER));
+                    
+                    // Kirim notifikasi ke Discord
+                    plugin.getWebhookManager().sendEventNotification(
+                        ChatColor.stripColor(eventName),
+                        ChatColor.stripColor(eventDescription),
+                        startTime,
+                        endTime,
+                        sellMultiplier,
+                        categorySellMultipliers
+                    );
                 }
             } catch (DateTimeParseException e) {
                 plugin.getLogger().warning("Format tanggal event salah: " + e.getMessage());
