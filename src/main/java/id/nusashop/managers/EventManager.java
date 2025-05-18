@@ -48,6 +48,10 @@ public class EventManager {
     // Task untuk pengumuman berkala
     private BukkitTask announcementTask;
     
+    // Task untuk pengecekan event
+    private BukkitTask eventCheckTask;
+    private String lastEventName = "";
+    
     // Formatter untuk waktu
     private static final DateTimeFormatter DATE_FORMATTER = 
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -58,6 +62,7 @@ public class EventManager {
     public EventManager(NusaShop plugin) {
         this.plugin = plugin;
         loadEvents();
+        startEventCheckTask();
     }
     
     /**
@@ -137,15 +142,18 @@ public class EventManager {
                     plugin.getLogger().info("Event aktif: " + eventName);
                     plugin.getLogger().info("Berlangsung hingga: " + endTime.format(DISPLAY_FORMATTER));
                     
-                    // Kirim notifikasi ke Discord
-                    plugin.getWebhookManager().sendEventNotification(
-                        ChatColor.stripColor(eventName),
-                        ChatColor.stripColor(eventDescription),
-                        startTime,
-                        endTime,
-                        sellMultiplier,
-                        categorySellMultipliers
-                    );
+                    // Only send Discord notification if this is a new event
+                    if (!eventName.equals(lastEventName)) {
+                        lastEventName = eventName;
+                        plugin.getWebhookManager().sendEventNotification(
+                            ChatColor.stripColor(eventName),
+                            ChatColor.stripColor(eventDescription),
+                            startTime,
+                            endTime,
+                            sellMultiplier,
+                            categorySellMultipliers
+                        );
+                    }
                 }
             } catch (DateTimeParseException e) {
                 plugin.getLogger().warning("Format tanggal event salah: " + e.getMessage());
@@ -231,6 +239,143 @@ public class EventManager {
                 Bukkit.broadcastMessage("");
             }
         }.runTaskTimer(plugin, 20 * 60, 20 * 60 * interval); // Interval dalam menit
+    }
+    
+    /**
+     * Start a task to periodically check for event changes
+     */
+    public void startEventCheckTask() {
+        // Cancel any existing task
+        if (eventCheckTask != null) {
+            eventCheckTask.cancel();
+        }
+        
+        // Check for event changes every minute
+        eventCheckTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                checkEventChanges();
+            }
+        }.runTaskTimer(plugin, 20 * 60, 20 * 60); // Check every minute
+    }
+    
+    /**
+     * Check if event status has changed and handle accordingly
+     */
+    private void checkEventChanges() {
+        LocalDateTime now = LocalDateTime.now();
+        boolean wasActive = hasActiveEvent;
+        String previousEventName = eventName;
+        
+        // Check if the current active event has ended
+        if (hasActiveEvent && now.isAfter(endTime)) {
+            hasActiveEvent = false;
+            plugin.getLogger().info("Event ended: " + eventName);
+            
+            // Reset multipliers
+            sellMultiplier = 1.0;
+            buyMultiplier = 1.0;
+            categorySellMultipliers.clear();
+            categoryBuyMultipliers.clear();
+            itemSellMultipliers.clear();
+            itemBuyMultipliers.clear();
+            
+            // Cancel announcement task
+            if (announcementTask != null) {
+                announcementTask.cancel();
+                announcementTask = null;
+            }
+        }
+        
+        // If no active event, check upcoming events
+        if (!hasActiveEvent) {
+            ConfigurationSection upcomingEvents = 
+                    plugin.getConfigManager().getConfig().getConfigurationSection("events.upcoming-events");
+            
+            if (upcomingEvents != null) {
+                for (String key : upcomingEvents.getKeys(false)) {
+                    ConfigurationSection eventConfig = upcomingEvents.getConfigurationSection(key);
+                    if (eventConfig != null) {
+                        try {
+                            LocalDateTime eventStart = LocalDateTime.parse(
+                                    eventConfig.getString("start-time"), DATE_FORMATTER);
+                            LocalDateTime eventEnd = LocalDateTime.parse(
+                                    eventConfig.getString("end-time"), DATE_FORMATTER);
+                            
+                            // Check if this event should be active now
+                            if (now.isAfter(eventStart) && now.isBefore(eventEnd)) {
+                                // Event should be active
+                                hasActiveEvent = true;
+                                eventName = ChatColor.translateAlternateColorCodes('&', 
+                                        eventConfig.getString("name", "&cEvent Spesial"));
+                                
+                                eventDescription = ChatColor.translateAlternateColorCodes('&', 
+                                        eventConfig.getString("description", "&eDeskripsi event"));
+                                
+                                sellMultiplier = eventConfig.getDouble("sell-multiplier", 1.0);
+                                buyMultiplier = eventConfig.getDouble("buy-multiplier", 1.0);
+                                startTime = eventStart;
+                                endTime = eventEnd;
+                                
+                                // Load category multipliers
+                                ConfigurationSection categorySection = 
+                                        eventConfig.getConfigurationSection("category-multipliers");
+                                
+                                if (categorySection != null) {
+                                    for (String categoryId : categorySection.getKeys(false)) {
+                                        double multiplier = categorySection.getDouble(categoryId, 1.0);
+                                        categorySellMultipliers.put(categoryId, multiplier);
+                                    }
+                                }
+                                
+                                plugin.getLogger().info("New event started: " + eventName);
+                                break; // Stop after finding the first active event
+                            }
+                        } catch (DateTimeParseException e) {
+                            plugin.getLogger().warning("Format tanggal event salah: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Handle event status changes
+        if (!previousEventName.equals(eventName)) {
+            // Track this as the last event name to prevent duplicate webhooks
+            lastEventName = eventName;
+            
+            if (hasActiveEvent) {
+                // Send Discord notification for new event
+                plugin.getWebhookManager().sendEventNotification(
+                    ChatColor.stripColor(eventName),
+                    ChatColor.stripColor(eventDescription),
+                    startTime,
+                    endTime,
+                    sellMultiplier,
+                    categorySellMultipliers
+                );
+                
+                // Schedule announcements
+                scheduleAnnouncements();
+                
+                // Announce event start
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "EVENT DIMULAI: " + eventName);
+                Bukkit.broadcastMessage(ChatColor.YELLOW + eventDescription);
+                Bukkit.broadcastMessage(ChatColor.WHITE + "Berakhir: " + endTime.format(DISPLAY_FORMATTER));
+                Bukkit.broadcastMessage(ChatColor.GOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                Bukkit.broadcastMessage("");
+            } else if (!previousEventName.isEmpty()) {
+                // Announce event end
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "EVENT BERAKHIR: " + previousEventName);
+                Bukkit.broadcastMessage(ChatColor.YELLOW + "Semua harga telah kembali normal.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                Bukkit.broadcastMessage("");
+            }
+        }
     }
     
     /**
