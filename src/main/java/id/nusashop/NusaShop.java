@@ -70,6 +70,10 @@ public class NusaShop extends JavaPlugin {
         
         statisticsManager = new StatisticsManager(this);
         
+        // Inisialisasi WebhookManager
+        webhookManager = new WebhookManager(this);
+        getLogger().info("Webhook Manager initialized");
+        
         // Inisialisasi EventManager
         eventManager = new EventManager(this);
         getLogger().info("Event Manager initialized");
@@ -77,10 +81,6 @@ public class NusaShop extends JavaPlugin {
         // Inisialisasi BlackmarketManager
         blackmarketManager = new BlackmarketManager(this);
         getLogger().info("Blackmarket Manager initialized");
-        
-        // Inisialisasi WebhookManager
-        webhookManager = new WebhookManager(this);
-        getLogger().info("Webhook Manager initialized");
         
         // Register commands dan tab completers
         getCommand("nusashop").setExecutor(new ShopCommand(this));
